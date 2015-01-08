@@ -60,7 +60,7 @@ public class MyRobotIsBetterThanYours extends Robot {
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		radarHit = e.getBearing();
+		radarHit = e.getHeading();
 		setGunHeading(radarHit);
 		roboFire(0, 10);
 	}
