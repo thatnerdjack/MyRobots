@@ -1,7 +1,6 @@
 package jackdoherty.robo;
 import robocode.*;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Random;
 
 // API help : http://robocode.sourceforge.net/docs/robocode/robocode/Robot.html
@@ -9,7 +8,7 @@ import java.util.Random;
 /**
  * MyRobotIsBetterThanYours - a robot by Jack Doherty
  */
-public class MyRobotIsBetterThanYours extends Robot {
+public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 	private double radarHit = -1;
 	private boolean isMovingRight = false;
@@ -24,9 +23,10 @@ public class MyRobotIsBetterThanYours extends Robot {
 
 		while(true) {
 			setDefaultColors(defaultColors);
+			setScanColor(Color.blue);
 			ahead(100);
-			turnRight(90);
 			turnRadarRight(360);
+			turnRight(90);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class MyRobotIsBetterThanYours extends Robot {
 		return randomValue;
 	}
 
-	private void roboFire(double min, double max) {
+	private void roboFire(double min, double max, boolean doHighPower) {
 		setBulletColor(defaultColors[(int)getRandomDouble(0, defaultColors.length)]);
 		fire(getRandomDouble(min, max));
 	}
@@ -60,8 +60,11 @@ public class MyRobotIsBetterThanYours extends Robot {
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		radarHit = e.getHeading();
+		radarHit = e.getBearing() + getHeading();
+		out.println("ROBOT: " + radarHit);
 		setGunHeading(radarHit);
+		out.println("GUN: " + getGunHeading());
+		waitFor(new GunTurnCompleteCondition(this));
 		roboFire(0, 10);
 	}
 
@@ -78,6 +81,6 @@ public class MyRobotIsBetterThanYours extends Robot {
 	 */
 	public void onHitWall(HitWallEvent e) {
 		// Replace the next line with any behavior you would like
-		back(20);
+		ahead(20);
 	}	
 }
