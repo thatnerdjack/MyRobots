@@ -51,7 +51,7 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		return randomValue;
 	}
 
-	private void roboFire(double min, double max, boolean doHighPower) {
+	private void roboFire(double min, double max/*, boolean doHighPower*/) {
 		setBulletColor(defaultColors[(int)getRandomDouble(0, defaultColors.length)]);
 		fire(getRandomDouble(min, max));
 	}
