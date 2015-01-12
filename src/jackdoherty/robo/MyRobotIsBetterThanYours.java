@@ -11,7 +11,7 @@ import java.util.Random;
 public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 	private double radarHit = -1;
-	private boolean isMovingRight = false;
+	private int hitCount = -1;
 	private final Color[] defaultColors = {
 		Color.red, Color.blue, Color.green, Color.magenta, Color.green, Color.blue
 	}; //body, gun, radar, bullet, radar arc, scan color
@@ -23,7 +23,6 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 		while(true) {
 			setDefaultColors(defaultColors);
-			setScanColor(Color.blue);
 			ahead(100);
 			turnRadarRight(360);
 			turnRight(90);
@@ -32,7 +31,6 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 	private void setGunHeading(double heading){
 		double dif = heading - getGunHeading();
-
 		if(dif < 180){
 			turnGunRight(dif);
 		} else{
@@ -51,9 +49,13 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		return randomValue;
 	}
 
-	private void roboFire(double min, double max/*, boolean doHighPower*/) {
+	private void roboFire(double min, double max) {
 		setBulletColor(defaultColors[(int)getRandomDouble(0, defaultColors.length)]);
-		fire(getRandomDouble(min, max));
+		if(hitCount > 1) {
+			fire(getRandomDouble(min + 10, max + 10));
+		} else {
+			fire(getRandomDouble(min, max));
+		}
 	}
 
 	/**
