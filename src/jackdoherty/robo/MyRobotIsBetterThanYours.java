@@ -10,8 +10,9 @@ import java.util.Random;
  */
 public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
+	private boolean isMovingForward;
 	private double radarHit = -1;
-	private int hitCount = -1;
+	private int hitCount = 0;
 	private final Color[] defaultColors = {
 		Color.red, Color.blue, Color.green, Color.magenta, Color.green, Color.blue
 	}; //body, gun, radar, bullet, radar arc, scan color
@@ -23,9 +24,11 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 		while(true) {
 			setDefaultColors(defaultColors);
+			isMovingForward = true;
 			ahead(100);
 			turnRadarRight(360);
 			turnRight(90);
+			execute();
 		}
 	}
 
@@ -49,7 +52,7 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		return randomValue;
 	}
 
-	private void roboFire(double min, double max) {
+	private void roboFire(double min, double max, int hitCount) {
 		setBulletColor(defaultColors[(int)getRandomDouble(0, defaultColors.length)]);
 		if(hitCount > 1) {
 			fire(getRandomDouble(min + 10, max + 10));
@@ -58,31 +61,34 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		}
 	}
 
-	/**
-	 * onScannedRobot: What to do when you see another robot
-	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		radarHit = e.getBearing() + getHeading();
 		out.println("ROBOT: " + radarHit);
 		setGunHeading(radarHit);
 		out.println("GUN: " + getGunHeading());
 		waitFor(new GunTurnCompleteCondition(this));
-		roboFire(0, 10);
+		roboFire(0, 10, hitCount);
 	}
 
-	/**
-	 * onHitByBullet: What to do when you're hit by a bullet
-	 */
+	public void onBulletHit(BulletHitEvent e) {
+		hitCount += 1;
+	}
+
+	public void onBulletMissed(BulletMissedEvent event) {
+		hitCount = 0;
+	}
+
 	public void onHitByBullet(HitByBulletEvent e) {
 		setAllColors(Color.red);
+		isMovingForward = false;
 		back(25);
 	}
-	
-	/**
-	 * onHitWall: What to do when you hit a wall
-	 */
+
 	public void onHitWall(HitWallEvent e) {
-		// Replace the next line with any behavior you would like
-		ahead(20);
-	}	
+		if(isMovingForward) {
+			back(10);
+		} else {
+			ahead(10);
+		}
+	}
 }
