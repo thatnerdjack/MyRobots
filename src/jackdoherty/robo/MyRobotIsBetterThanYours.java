@@ -10,6 +10,8 @@ import java.util.Random;
  */
 public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
+	//set constants for walls and then put a way to fidn wall in roboMove method.
+
 	private boolean isMovingForward;
 	private double radarHit = -1;
 	private int hitCount = 0;
@@ -25,11 +27,32 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		while(true) {
 			setDefaultColors(defaultColors);
 			isMovingForward = true;
+			out.println("X Coord: " + getX());
+			out.println("Y Coord: " + getY());
 			ahead(100);
 			turnRadarRight(360);
 			turnRight(90);
 			execute();
 		}
+	}
+
+	private void roboMove() {
+		double xCoord = getX();
+		double yCoord = getY();
+		double fieldHeight = getBattleFieldHeight();
+		double fieldWidth = getBattleFieldWidth();
+		double sideA;
+		double sideB;
+		double distanceToWallC;
+		int turnDirection = getRandomInt(0, 3); // 1=forward, 2=right, 3=back, 4=left
+		turnRight(turnDirection * 90);
+//		sideA = getDistance(xCoord, yCoord, );
+	}
+
+	private double getDistance(double x1, double y1, double x2, double y2) {
+		double xDist = (x1 - x2) * (x1 - x2);
+		double yDist = (y1 - y2) * (y1 - y2);
+		return Math.sqrt(xDist + yDist);
 	}
 
 	private void setGunHeading(double heading){
@@ -46,6 +69,12 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		setScanColor(defaultColors[5]);
 	}
 
+	private int getRandomInt(int min, int max) {
+		Random r = new Random();
+		int randomNum = r.nextInt((max - min) + 1) + min;
+		return randomNum;
+	}
+
 	private double getRandomDouble(double min, double max) {
 		Random r = new Random();
 		double randomValue = min + (max - min) * r.nextDouble();
@@ -55,7 +84,7 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 	private void roboFire(double min, double max, int hitCount) {
 		setBulletColor(defaultColors[(int)getRandomDouble(0, defaultColors.length)]);
 		if(hitCount > 1) {
-			fire(getRandomDouble(min + 10, max + 10));
+			fire(getRandomDouble(min + 1, max + 1));
 		} else {
 			fire(getRandomDouble(min, max));
 		}
@@ -67,7 +96,7 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		setGunHeading(radarHit);
 		out.println("GUN: " + getGunHeading());
 		waitFor(new GunTurnCompleteCondition(this));
-		roboFire(0, 10, hitCount);
+		roboFire(0.1, 2, hitCount);
 	}
 
 	public void onBulletHit(BulletHitEvent e) {
