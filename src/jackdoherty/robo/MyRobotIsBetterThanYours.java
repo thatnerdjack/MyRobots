@@ -51,6 +51,7 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		double distanceToWallC;
 		int turnDirection = getRandomInt(0, 3); // 1=forward, 2=right, 3=back, 4=left
 		turnRight(turnDirection * 90);
+		//START HERE
 	}
 
 	private double getDistance(double x1, double y1, double x2, double y2) {
