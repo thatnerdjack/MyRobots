@@ -12,6 +12,11 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 
 	//set constants for walls and then put a way to fidn wall in roboMove method.
 
+	private final int NORTH_WALL = 0;
+	private final int EAST_WALL = 1;
+	private final int SOUTH_WALL = 2;
+	private final int WEST_WALL = 3;
+
 	private boolean isMovingForward;
 	private double radarHit = -1;
 	private int hitCount = 0;
@@ -46,7 +51,6 @@ public class MyRobotIsBetterThanYours extends AdvancedRobot {
 		double distanceToWallC;
 		int turnDirection = getRandomInt(0, 3); // 1=forward, 2=right, 3=back, 4=left
 		turnRight(turnDirection * 90);
-//		sideA = getDistance(xCoord, yCoord, );
 	}
 
 	private double getDistance(double x1, double y1, double x2, double y2) {
